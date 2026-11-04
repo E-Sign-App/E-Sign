@@ -145,31 +145,24 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
       text-decoration: none;
-      color: var(--text);
-      font-weight: 800;
-      font-size: 1.35rem;
-      letter-spacing: -0.5px;
-    }
-    .brand-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 1.25rem;
-      box-shadow: 0 8px 20px -4px var(--primary-glow);
     }
     .brand-logo-img {
-      width: 44px;
-      height: 44px;
+      height: 52px;
+      width: auto;
+      max-height: 52px;
       object-fit: contain;
-      filter: drop-shadow(0 4px 10px rgba(79, 70, 229, 0.45));
-      border-radius: 10px;
+      filter: drop-shadow(0 4px 14px rgba(79, 70, 229, 0.45));
+      transition: transform 0.25s ease;
+    }
+    .brand-logo-img:hover {
+      transform: scale(1.05);
+    }
+    .footer-logo-img {
+      height: 56px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 14px rgba(79, 70, 229, 0.45));
     }
     .hero-icon-showcase {
       display: flex;
@@ -178,10 +171,11 @@
       margin-bottom: 24px;
     }
     .hero-app-icon {
-      width: 140px;
-      height: 140px;
+      width: 220px;
+      height: auto;
+      max-width: 85%;
       object-fit: contain;
-      filter: drop-shadow(0 16px 32px rgba(79, 70, 229, 0.48));
+      filter: drop-shadow(0 20px 40px rgba(79, 70, 229, 0.55));
       animation: floatIcon 3.5s ease-in-out infinite;
     }
     @keyframes floatIcon {
@@ -860,9 +854,8 @@
   <!-- Header -->
   <header>
     <div class="container nav-wrapper">
-      <a href="#" class="brand">
-        <img src="app_icon.png" alt="E-Sign Logo" class="brand-logo-img">
-        <span>E-Sign</span>
+      <a href="#" class="brand" aria-label="E-Sign Home">
+        <img src="logo.png" alt="E-Sign Logo" class="brand-logo-img">
       </a>
 
       <ul class="nav-links">
@@ -890,7 +883,7 @@
   <section class="hero">
     <div class="container">
       <div class="hero-icon-showcase">
-        <img src="app_icon.png" alt="E-Sign Official App Icon" class="hero-app-icon">
+        <img src="logo.png" alt="E-Sign Official App Logo" class="hero-app-icon">
       </div>
       <div class="release-badge">
         <i class="fa-solid fa-shield-halved"></i>
@@ -1291,9 +1284,8 @@
   <footer>
     <div class="container">
       <div class="footer-wrapper">
-        <a href="#" class="brand">
-          <img src="app_icon.png" alt="E-Sign Logo" class="brand-logo-img">
-          <span>E-Sign</span>
+        <a href="#" class="brand" aria-label="E-Sign Home">
+          <img src="logo.png" alt="E-Sign Logo" class="footer-logo-img">
         </a>
 
         <ul class="footer-links">

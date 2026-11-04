@@ -24,9 +24,8 @@ Visit the official live landing page and portfolio:
 ## ⚡ Features
 - ✍️ **Multi-Page PDF Signer:** Freehand drawing, saved signatures, stamps, date/initial annotations with smooth vector rendering.
 - 🛡️ **AES-256-GCM Secure Vault:** Client-side zero-knowledge encrypted vault for private documents and media.
-- 🪄 **AI Magic Background Eraser:** Instant 1-tap transparent signature and document background cleanup.
+- 🔄 **Universal Format Conversion:** Convert PDFs to high-res images and images back to clean PDF documents.
 - 🗜️ **Smart Image Optimizer:** Target-size JPEG/PNG compression preserving high visual fidelity.
-- 📁 **Universal Format Conversion:** Convert PDFs to high-res images and images back to clean PDF documents.
 - 🔒 **100% Offline & Private:** Zero document upload, no mandatory login, 100% on-device processing.
 
 ---

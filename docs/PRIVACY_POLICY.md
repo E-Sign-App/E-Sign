@@ -2,7 +2,7 @@
 
 **Last Updated:** November 4, 2026
 
-Thank you for choosing **E-Sign: Sign PDF & Documents** ("we", "our", or "us"), developed by **Ranbir Saini**. Your privacy is our highest priority. This Privacy Policy outlines our commitment to transparency, zero data collection, and local on-device security.
+Thank you for choosing **E-Sign: Sign PDF & Documents** ("we", "our", or "us"), provided by **E-Sign App**. Your privacy is our highest priority. This Privacy Policy outlines our commitment to transparency, zero data collection, and local on-device security.
 
 ---
 
@@ -16,7 +16,7 @@ E-Sign operates with a **zero-knowledge, offline-first** architecture:
 ## 2. Secure Vault & AES-256 Encryption
 - Any file or media locked inside the **Secure Vault** is encrypted locally using industry-standard **AES-256-GCM** encryption.
 - Encryption keys and master passwords are kept only in your device's hardware-backed secure storage (such as Android Keystore / Flutter Secure Storage).
-- We have no backdoor, master recovery key, or remote access to your vaulted content. If you forget your password, the encrypted files cannot be decrypted by anyone, including the developer.
+- We have no backdoor, master recovery key, or remote access to your vaulted content. If you forget your password, the encrypted files cannot be decrypted by anyone.
 
 ---
 
@@ -49,10 +49,8 @@ We may periodically update this policy to reflect new capabilities or regulatory
 ---
 
 ## 7. Contact Us
-If you have any questions, suggestions, or concerns regarding this privacy policy or the E-Sign application, please contact the developer:
+If you have any questions, suggestions, or concerns regarding this privacy policy or the E-Sign application, please contact:
 
-- **Developer:** Ranbir Saini
-- **Email:** [sainiranbir645@gmail.com](mailto:sainiranbir645@gmail.com)
-- **GitHub:** [https://github.com/Ranbirsaini](https://github.com/Ranbirsaini)
-- **App Website:** [https://ranbirsaini.github.io/e-sign-web/](https://ranbirsaini.github.io/e-sign-web/)
-
+- **Organization:** E-Sign App
+- **GitHub:** [https://github.com/E-Sign-App/E-Sign](https://github.com/E-Sign-App/E-Sign)
+- **App Website:** [https://e-sign-app.github.io/E-Sign/](https://e-sign-app.github.io/E-Sign/)

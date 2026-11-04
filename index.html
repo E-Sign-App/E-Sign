@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Sign: Sign PDF & Documents | Official App & Developer Portfolio</title>
+  <meta name="description" content="All-in-one Flutter power-suite for digital signatures, PDF editing, AI magic eraser, image compression, and military-grade AES-256 secure vault. Built by Ranbir Saini.">
+  <meta name="keywords" content="E-Sign, PDF Signer, Digital Signature, Secure Vault, AES-256, File Locker, Image Optimizer, Ranbir Saini, Flutter App">
+  <meta name="author" content="Ranbir Saini">
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="E-Sign: Sign PDF, Edit Documents & Military-Grade Vault">
+  <meta property="og:description" content="Digitally sign PDFs, optimize images, remove backgrounds with AI, and password-lock your files with AES-256-GCM.">
+  <meta property="og:url" content="https://ranbirsaini.github.io/e-sign-web/">
+  <meta property="og:image" content="https://ranbirsaini.github.io/e-sign-web/app_icon.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://ranbirsaini.github.io/e-sign-web/app_icon.png">
+
+  <!-- Favicon / App Icon -->
+  <link rel="icon" type="image/png" href="app_icon.png">
+  <link rel="apple-touch-icon" href="app_icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #6366f1;
+      --primary-dark: #3730a3;
+      --primary-glow: rgba(99, 102, 241, 0.28);
+      --accent: #8b5cf6;
+      --emerald: #10b981;
+      --rose: #f43f5e;
+      --amber: #f59e0b;
+      --sky: #0ea5e9;
+
+      /* Dark Mode Defaults */
+      --bg: #090d16;
+      --bg-card: rgba(18, 24, 38, 0.72);
+      --bg-card-hover: rgba(26, 34, 52, 0.85);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(99, 102, 241, 0.5);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-sub: #cbd5e1;
+      --nav-bg: rgba(9, 13, 22, 0.85);
+      --glass-blur: blur(16px);
+      --shadow-card: 0 16px 36px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-card: rgba(255, 255, 255, 0.9);
+      --bg-card-hover: rgba(255, 255, 255, 1);
+      --border: rgba(0, 0, 0, 0.08);
+      --border-focus: rgba(99, 102, 241, 0.4);
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --text-sub: #334155;
+      --nav-bg: rgba(255, 255, 255, 0.85);
+      --shadow-card: 0 16px 36px -10px rgba(99, 102, 241, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Background Glow */
+    .ambient-glow {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .ambient-blob-1 {
+      position: absolute;
+      top: -15%;
+      left: 20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+      filter: blur(80px);
+    }
+    .ambient-blob-2 {
+      position: absolute;
+      top: 40%;
+      right: 10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.18) 0%, transparent 70%);
+      filter: blur(80px);
+    }
+
+    /* Layout Containers */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header & Navigation */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--nav-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+    }
+    .nav-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 74px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -0.5px;
+    }
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.25rem;
+      box-shadow: 0 8px 20px -4px var(--primary-glow);
+    }
+    .brand-logo-img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 10px rgba(79, 70, 229, 0.45));
+      border-radius: 10px;
+    }
+    .hero-icon-showcase {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .hero-app-icon {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      filter: drop-shadow(0 16px 32px rgba(79, 70, 229, 0.48));
+      animation: floatIcon 3.5s ease-in-out infinite;
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-8px) scale(1.02); }
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover {
+      color: var(--primary-light);
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .theme-toggle {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .theme-toggle:hover {
+      border-color: var(--border-focus);
+      transform: scale(1.05);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      border: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      box-shadow: 0 10px 24px -6px var(--primary-glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -4px var(--primary-glow);
+      filter: brightness(1.08);
+    }
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--border-focus);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      border-radius: 10px;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 160px 0 100px;
+      text-align: center;
+      position: relative;
+    }
+    .release-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 30px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: var(--primary-light);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      animation: pulse 2.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+    .hero h1 {
+      font-size: 3.6rem;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 36px;
+      font-weight: 400;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 50px;
+    }
+    .google-play-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: #000;
+      color: white;
+      padding: 10px 22px;
+      border-radius: 12px;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      transition: all 0.2s;
+    }
+    .google-play-badge:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+    .google-play-badge i {
+      font-size: 1.8rem;
+      color: #34a853;
+    }
+    .play-text {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      line-height: 1.2;
+    }
+    .play-text span {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #94a3b8;
+    }
+    .play-text strong {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    /* Trust Highlights Row */
+    .trust-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .trust-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 16px 20px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+      box-shadow: var(--shadow-card);
+    }
+    .trust-icon {
+      font-size: 1.4rem;
+      color: var(--primary-light);
+    }
+    .trust-card h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .trust-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Section Headers */
+    .section-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 60px;
+    }
+    .section-tag {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--primary-light);
+      margin-bottom: 12px;
+      display: block;
+    }
+    .section-header h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    /* Features Grid */
+    .features-section {
+      padding: 100px 0;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 28px;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--border-focus);
+      background: var(--bg-card-hover);
+    }
+    .feature-badge {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .feature-icon-wrapper {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 24px;
+    }
+    .feature-card h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .feature-card p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: var(--text-sub);
+    }
+    .feature-list li i {
+      color: var(--emerald);
+      font-size: 0.9rem;
+    }
+
+    /* Colors per feature */
+    .feat-vault .feature-icon-wrapper { background: rgba(139, 92, 246, 0.15); color: #8b5cf6; }
+    .feat-vault .feature-badge { background: rgba(139, 92, 246, 0.2); color: #c084fc; }
+    .feat-pdf .feature-icon-wrapper { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+    .feat-pdf .feature-badge { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+    .feat-img .feature-icon-wrapper { background: rgba(14, 165, 233, 0.15); color: #0ea5e9; }
+    .feat-img .feature-badge { background: rgba(14, 165, 233, 0.2); color: #38bdf8; }
+    .feat-ai .feature-icon-wrapper { background: rgba(236, 72, 153, 0.15); color: #ec4899; }
+    .feat-ai .feature-badge { background: rgba(236, 72, 153, 0.2); color: #f472b6; }
+    .feat-compress .feature-icon-wrapper { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+    .feat-compress .feature-badge { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .feat-intent .feature-icon-wrapper { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+    .feat-intent .feature-badge { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+
+    /* Security Deep-Dive Section */
+    .security-section {
+      padding: 100px 0;
+      background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.05), transparent);
+    }
+    .security-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 48px;
+      align-items: center;
+      box-shadow: var(--shadow-card);
+    }
+    .security-content h3 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+    .security-content p {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      font-size: 1.05rem;
+    }
+    .cipher-terminal {
+      background: #030712;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+    }
+    .terminal-header {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .term-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .term-dot-red { background: #ef4444; }
+    .term-dot-yellow { background: #eab308; }
+    .term-dot-green { background: #22c55e; }
+    .term-code {
+      line-height: 1.8;
+    }
+    .term-green { color: #4ade80; }
+    .term-blue { color: #60a5fa; }
+    .term-purple { color: #c084fc; }
+
+    /* Timeline Section */
+    .timeline-section {
+      padding: 100px 0;
+    }
+    .timeline {
+      position: relative;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 20px 0;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 31px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+    .timeline-item {
+      position: relative;
+      padding-left: 80px;
+      margin-bottom: 40px;
+    }
+    .timeline-node {
+      position: absolute;
+      left: 18px;
+      top: 4px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 3px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 6px var(--primary-glow);
+    }
+    .timeline-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+    }
+    .timeline-date {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary-light);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .timeline-card h4 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .timeline-card p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    /* Tech Stack Pills */
+    .stack-section {
+      padding: 80px 0;
+      text-align: center;
+    }
+    .stack-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .stack-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-card);
+    }
+    .stack-pill i {
+      color: var(--primary-light);
+    }
+
+    /* Developer Bio / Portfolio */
+    .dev-section {
+      padding: 100px 0;
+    }
+    .dev-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px;
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 40px;
+      align-items: center;
+      box-shadow: var(--shadow-card);
+    }
+    .dev-avatar-box {
+      text-align: center;
+    }
+    .dev-avatar {
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #a855f7);
+      padding: 4px;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dev-avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: white;
+    }
+    .dev-role {
+      font-size: 0.85rem;
+      color: var(--primary-light);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .dev-details h3 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .dev-details p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+    .dev-links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      padding: 100px 0;
+    }
+    .faq-grid {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .faq-question {
+      padding: 22px 26px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .faq-question i {
+      color: var(--primary-light);
+      transition: transform 0.25s;
+    }
+    .faq-item.active .faq-question i {
+      transform: rotate(180deg);
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      padding: 0 26px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .faq-item.active .faq-answer {
+      max-height: 240px;
+      padding-bottom: 22px;
+    }
+
+    /* CTA Bottom Banner */
+    .cta-banner {
+      padding: 100px 0;
+      text-align: center;
+    }
+    .cta-box {
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(139, 92, 246, 0.15));
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 28px;
+      padding: 64px 32px;
+      max-width: 900px;
+      margin: 0 auto;
+      box-shadow: 0 20px 40px -10px var(--primary-glow);
+    }
+    .cta-box h2 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+    .cta-box p {
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      max-width: 600px;
+      margin: 0 auto 36px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 60px 0 40px;
+      background: var(--nav-bg);
+      backdrop-filter: var(--glass-blur);
+    }
+    .footer-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover {
+      color: var(--primary-light);
+    }
+    .copyright {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: center;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 900px) {
+      .hero h1 { font-size: 2.5rem; }
+      .nav-links { display: none; }
+      .security-box { grid-template-columns: 1fr; }
+      .dev-card { grid-template-columns: 1fr; text-align: center; }
+      .dev-links { justify-content: center; }
+      .footer-wrapper { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Glow -->
+  <div class="ambient-glow">
+    <div class="ambient-blob-1"></div>
+    <div class="ambient-blob-2"></div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="container nav-wrapper">
+      <a href="#" class="brand">
+        <img src="app_icon.png" alt="E-Sign Logo" class="brand-logo-img">
+        <span>E-Sign</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#vault">Secure Vault</a></li>
+        <li><a href="#timeline">Journey</a></li>
+        <li><a href="#tech">Tech Stack</a></li>
+        <li><a href="#developer">Developer</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle Theme">
+          <i class="fa-solid fa-sun" id="themeIcon"></i>
+        </button>
+        <a href="https://play.google.com/store/apps/details?id=com.e_sign_pr.e_sign_pr" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+          <i class="fa-brands fa-google-play"></i>
+          <span>Get App</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-icon-showcase">
+        <img src="app_icon.png" alt="E-Sign Official App Icon" class="hero-app-icon">
+      </div>
+      <div class="release-badge">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>v1.0.13 Released • Military-Grade AES-256 Vault Inside</span>
+      </div>
+
+      <h1>
+        Sign, Secure & Optimize <br>
+        <span class="gradient-text">Any Document. Anywhere.</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        The ultimate client-side Flutter application for electronic signatures, multi-page PDF editing, AI magic background removal, image compression, and zero-knowledge encrypted file sharing.
+      </p>
+
+      <div class="hero-actions">
+        <a href="https://play.google.com/store/apps/details?id=com.e_sign_pr.e_sign_pr" target="_blank" rel="noopener" class="google-play-badge">
+          <i class="fa-brands fa-google-play"></i>
+          <div class="play-text">
+            <span>GET IT ON</span>
+            <strong>Google Play</strong>
+          </div>
+        </a>
+
+        <a href="https://github.com/Ranbirsaini/e-sign-web" target="_blank" rel="noopener" class="btn btn-secondary">
+          <i class="fa-brands fa-github"></i>
+          <span>GitHub Repository</span>
+        </a>
+      </div>
+
+      <!-- Trust Badges -->
+      <div class="trust-row">
+        <div class="trust-card">
+          <i class="fa-solid fa-lock trust-icon"></i>
+          <div>
+            <h4>Zero-Knowledge</h4>
+            <p>AES-256-GCM encryption</p>
+          </div>
+        </div>
+
+        <div class="trust-card">
+          <i class="fa-solid fa-feather-pointed trust-icon"></i>
+          <div>
+            <h4>High-DPI Signing</h4>
+            <p>Smooth vector signatures</p>
+          </div>
+        </div>
+
+        <div class="trust-card">
+          <i class="fa-solid fa-wand-magic-sparkles trust-icon"></i>
+          <div>
+            <h4>AI Magic Eraser</h4>
+            <p>1-tap background cleanup</p>
+          </div>
+        </div>
+
+        <div class="trust-card">
+          <i class="fa-solid fa-file-shield trust-icon"></i>
+          <div>
+            <h4>100% On-Device</h4>
+            <p>Works completely offline</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">A to Z Capabilities</span>
+        <h2>Engineered for Power & Privacy</h2>
+        <p>From signing official government forms to locking sensitive family media, E-Sign delivers an executive suite of tools on your mobile device.</p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature 1: PDF Signer -->
+        <div class="feature-card feat-pdf">
+          <span class="feature-badge">Core Engine</span>
+          <div class="feature-icon-wrapper">
+            <i class="fa-solid fa-file-pdf"></i>
+          </div>
+          <h3>Multi-Page PDF Signer & Editor</h3>
+          <p>Open, fill, annotate, and digitally sign multi-page PDF documents with vector precision. Drag, resize, rotate, and stamp signatures with date stamps.</p>
+          <ul class="feature-list">
+            <li><i class="fa-solid fa-check"></i> Freehand stylus & finger drawing pad</li>
+            <li><i class="fa-solid fa-check"></i> Saved signatures library for instant reuse</li>
+            <li><i class="fa-solid fa-check"></i> Text annotations, custom dates & initials</li>
+            <li><i class="fa-solid fa-check"></i> High-resolution lossless PDF export</li>
+          </ul>
+        </div>
+
+        <!-- Feature 2: Secure Vault -->
+        <div class="feature-card feat-vault" id="vault">
+          <span class="feature-badge">Zero-Knowledge</span>
+          <div class="feature-icon-wrapper">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <h3>Military-Grade Secure Vault</h3>
+          <p>Lock and password-protect your PDFs, Videos, Photos, and Documents using authenticated AES-256-GCM encryption. Share portable <code>.esec</code> files safely.</p>
+          <ul class="feature-list">
+            <li><i class="fa-solid fa-check"></i> PBKDF2 key derivation (100,000 iterations)</li>
+            <li><i class="fa-solid fa-check"></i> In-App Decrypted Media & Video Player</li>
+            <li><i class="fa-solid fa-check"></i> Auto-wipe cache upon screen exit</li>
+            <li><i class="fa-solid fa-check"></i> Share protected files via WhatsApp or Drive</li>
+          </ul>
+        </div>
+
+        <!-- Feature 3: Image Studio -->
+        <div class="feature-card feat-img">
+          <span class="feature-badge">Studio Grade</span>
+          <div class="feature-icon-wrapper">
+            <i class="fa-solid fa-image"></i>
+          </div>
+          <h3>Image Signing & Stamp Studio</h3>
+          <p>Sign identity cards, certificates, photos, and scanned paper contracts. Crop, rotate, apply contrast filters, and place verified company stamps.</p>
+          <ul class="feature-list">
+            <li><i class="fa-solid fa-check"></i> Aspect ratio crop (1:1, 16:9, A4, Free)</li>
+            <li><i class="fa-solid fa-check"></i> Color presets, contrast & brightness tuning</li>
+            <li><i class="fa-solid fa-check"></i> Direct export to device Gallery or PDF</li>
+          </ul>
+        </div>
+
+        <!-- Feature 4: AI Magic Eraser -->
+        <div class="feature-card feat-ai">
+          <span class="feature-badge">Smart AI</span>
+          <div class="feature-icon-wrapper">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </div>
+          <h3>AI Magic Background Eraser</h3>
+          <p>Turn paper signatures into clean transparent digital stamps in seconds. The on-device neural edge detector isolates ink strokes and eliminates shadows.</p>
+          <ul class="feature-list">
+            <li><i class="fa-solid fa-check"></i> 1-Tap paper background removal</li>
+            <li><i class="fa-solid fa-check"></i> Adjustable tolerance threshold slider</li>
+            <li><i class="fa-solid fa-check"></i> Export transparent PNG stickers</li>
+          </ul>
+        </div>
+
+        <!-- Feature 5: Image Optimizer -->
+        <div class="feature-card feat-compress">
+          <span class="feature-badge">Fast Utility</span>
+          <div class="feature-icon-wrapper">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <h3>Image Optimizer & Compressor</h3>
+          <p>Shrink heavy photos to exact file-size limits (e.g. under 100KB for government job applications) without losing readable clarity.</p>
+          <ul class="feature-list">
+            <li><i class="fa-solid fa-check"></i> Target file size mode (KB / MB input)</li>
+            <li><i class="fa-solid fa-check"></i> Real-time before/after compression preview</li>
+            <li><i class="fa-solid fa-check"></i> Dimension scaling & quality sliders</li>
+          </ul>
+        </div>
+
+        <!-- Feature 6: Universal Intent Handler -->
+        <div class="feature-card feat-intent">
+          <span class="feature-badge">OS Integration</span>
+          <div class="feature-icon-wrapper">
+            <i class="fa-solid fa-share-nodes"></i>
+          </div>
+          <h3>Universal File & Intent Opener</h3>
+          <p>Tap any PDF, Image, Video, or <code>.esec</code> file in WhatsApp, Gmail, or File Manager — E-Sign opens instantly as the default viewer and asks for the password.</p>
+          <ul class="feature-list">
+            <li><i class="fa-solid fa-check"></i> Direct tap handling from WhatsApp chats</li>
+            <li><i class="fa-solid fa-check"></i> Cold-start bypass: Direct password screen</li>
+            <li><i class="fa-solid fa-check"></i> Fallback sharing with Play Store install link</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Security Deep Dive -->
+  <section class="security-section">
+    <div class="container">
+      <div class="security-box">
+        <div class="security-content">
+          <span class="section-tag">Zero-Knowledge Cryptography</span>
+          <h3>How E-Sign Protects Your Most Sensitive Files</h3>
+          <p>
+            Unlike traditional cloud apps that hold your decryption keys on their servers, E-Sign utilizes a <strong>Zero-Knowledge Architecture</strong>. Your password never leaves your device, and no one—not even the app developer—can decrypt your files without your secret passphrase.
+          </p>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <div class="stack-pill"><i class="fa-solid fa-key"></i> PBKDF2 With SHA-256</div>
+            <div class="stack-pill"><i class="fa-solid fa-shield-virus"></i> 128-Bit GCM Auth Tag</div>
+            <div class="stack-pill"><i class="fa-solid fa-fingerprint"></i> Random Cryptographic Salt</div>
+          </div>
+        </div>
+
+        <div class="cipher-terminal">
+          <div class="terminal-header">
+            <div class="term-dot term-dot-red"></div>
+            <div class="term-dot term-dot-yellow"></div>
+            <div class="term-dot term-dot-green"></div>
+            <span style="font-size: 0.75rem; color: #64748b; margin-left: 8px;">aes_encryption_pipeline.dart</span>
+          </div>
+          <div class="term-code">
+            <span class="term-purple">// 1. Derive 256-bit Key from user password</span><br>
+            final key = PBKDF2(salt: randomBytes(16), iterations: 100_000);<br><br>
+            <span class="term-blue">// 2. Authenticated GCM Cipher</span><br>
+            final cipher = AESGCM(key: key, iv: randomBytes(16));<br>
+            final ciphertext = cipher.encrypt(documentBytes);<br><br>
+            <span class="term-green">// 3. Pack into tamper-proof .esec container</span><br>
+            final esecPayload = [MAGIC_HEADER, SALT, IV, TAG, CIPHERTEXT];<br>
+            <span class="term-green">✓ STATUS: MILITARY_GRADE_ENCRYPTED</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- App Timeline / Genesis -->
+  <section class="timeline-section" id="timeline">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Release Journey</span>
+        <h2>How E-Sign Was Built</h2>
+        <p>A step-by-step engineering roadmap of how Ranbir Saini crafted E-Sign from a blank canvas to an all-in-one productivity suite.</p>
+      </div>
+
+      <div class="timeline">
+        <!-- Milestone 1 -->
+        <div class="timeline-item">
+          <div class="timeline-node"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">Phase 1 • Foundations</div>
+            <h4>Core Vector Digital Signature & PDF Engine</h4>
+            <p>Engineered the multi-page PDF rendering engine using Syncfusion with interactive drag-and-drop signature stamps, text annotations, and high-definition rasterization.</p>
+          </div>
+        </div>
+
+        <!-- Milestone 2 -->
+        <div class="timeline-item">
+          <div class="timeline-node"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">Phase 2 • Studio Upgrade</div>
+            <h4>Image Studio & AI Magic Background Eraser</h4>
+            <p>Introduced the dedicated image signing studio, custom photo cropping, filter algorithms, and an on-device AI eraser to turn handwritten signatures into clean digital cutouts.</p>
+          </div>
+        </div>
+
+        <!-- Milestone 3 -->
+        <div class="timeline-item">
+          <div class="timeline-node"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">Phase 3 • Design System</div>
+            <h4>Triple-Theme System & Cloud Synchronization</h4>
+            <p>Built a responsive theme architecture with Light Mode, Executive Dark Slate, and pure AMOLED Black. Integrated Supabase authentication while preserving full offline Guest mode.</p>
+          </div>
+        </div>
+
+        <!-- Milestone 4 -->
+        <div class="timeline-item">
+          <div class="timeline-node"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">Phase 4 • Current v1.0.13</div>
+            <h4>Zero-Knowledge AES-256 Vault & Universal Intent Flow</h4>
+            <p>Launched the Military-Grade Secure Vault for locking videos, images, PDFs, and documents into <code>.esec</code> files, accompanied by seamless Android intent handling from WhatsApp & File Manager.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech Stack Section -->
+  <section class="stack-section" id="tech">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Engineered with Precision</span>
+        <h2>Technology Stack & Libraries</h2>
+        <p>E-Sign is built with high-performance frameworks and hardened security packages.</p>
+      </div>
+
+      <div class="stack-grid">
+        <div class="stack-pill"><i class="fa-brands fa-flutter"></i> Flutter 3.x (Dart 3.10)</div>
+        <div class="stack-pill"><i class="fa-solid fa-shield"></i> PointyCastle (AES-GCM / PBKDF2)</div>
+        <div class="stack-pill"><i class="fa-solid fa-file-pdf"></i> Syncfusion Flutter PDF</div>
+        <div class="stack-pill"><i class="fa-solid fa-database"></i> Supabase Auth & Storage</div>
+        <div class="stack-pill"><i class="fa-solid fa-film"></i> ExoPlayer (video_player)</div>
+        <div class="stack-pill"><i class="fa-solid fa-photo-film"></i> Gal Gallery Media Engine</div>
+        <div class="stack-pill"><i class="fa-solid fa-route"></i> GetX Reactive State & Router</div>
+        <div class="stack-pill"><i class="fa-solid fa-chart-line"></i> Firebase Analytics & Crashlytics</div>
+        <div class="stack-pill"><i class="fa-brands fa-google"></i> Google Mobile Ads SDK</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Developer Portfolio -->
+  <section class="dev-section" id="developer">
+    <div class="container">
+      <div class="dev-card">
+        <div class="dev-avatar-box">
+          <div class="dev-avatar">
+            <div class="dev-avatar-inner">
+              <i class="fa-solid fa-user-astronaut"></i>
+            </div>
+          </div>
+          <span class="dev-role">Mobile Engineer</span>
+        </div>
+
+        <div class="dev-details">
+          <h3>Meet the Developer — Ranbir Saini</h3>
+          <p>
+            Hi! I am Ranbir Saini, a passionate Flutter & Mobile Application Developer dedicated to building clean, high-performance, and privacy-first digital tools. E-Sign was built out of the belief that everyday users deserve professional-grade document signing, AI editing, and military-grade encryption without recurring SaaS subscriptions or compromising data privacy.
+          </p>
+
+          <div class="dev-links">
+            <a href="https://github.com/Ranbirsaini" target="_blank" rel="noopener" class="btn btn-secondary btn-sm">
+              <i class="fa-brands fa-github"></i>
+              <span>GitHub Profile</span>
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=com.e_sign_pr.e_sign_pr" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+              <i class="fa-brands fa-google-play"></i>
+              <span>Play Store Apps</span>
+            </a>
+            <a href="mailto:sainiranbir645@gmail.com" class="btn btn-secondary btn-sm">
+              <i class="fa-solid fa-envelope"></i>
+              <span>Contact Developer</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Frequently Asked Questions</span>
+        <h2>Everything You Need to Know</h2>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-item active">
+          <div class="faq-question">
+            <span>Are my signed documents and passwords stored on your servers?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            No! E-Sign is strictly <strong>Zero-Knowledge</strong>. In Guest mode, all PDFs, images, and signatures remain 100% on your local device. Encrypted files in the Secure Vault use a password that is never transmitted or saved anywhere. If you forget your password, even we cannot decrypt your file.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>How does the shared <code>.esec</code> vault file open on another phone?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            When you share an encrypted file via WhatsApp or email, the recipient receives a protected <code>.esec</code> file and a download link. When tapped on their Android device, E-Sign opens automatically, prompts for the password, verifies the cryptographic authentication tag, and smoothly launches the built-in media viewer.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Can I use E-Sign without creating an account?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            Yes! E-Sign features full offline <strong>Guest Mode</strong>. You can sign unlimited documents, use the AI magic eraser, optimize images, and lock vault files completely offline without an internet connection or account sign-up.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Are electronic signatures created with E-Sign legally valid?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            Yes. Digital electronic signatures made in E-Sign comply with electronic signature acts (such as the US ESIGN Act and European eIDAS) for standard agreements, invoices, NDA forms, and rental contracts.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA Banner -->
+  <section class="cta-banner">
+    <div class="container">
+      <div class="cta-box">
+        <h2>Experience Next-Gen Document Signing</h2>
+        <p>Download E-Sign free on Android today and join thousands of professionals managing documents securely on the go.</p>
+        <div class="hero-actions" style="margin-bottom: 0;">
+          <a href="https://play.google.com/store/apps/details?id=com.e_sign_pr.e_sign_pr" target="_blank" rel="noopener" class="google-play-badge">
+            <i class="fa-brands fa-google-play"></i>
+            <div class="play-text">
+              <span>DOWNLOAD NOW ON</span>
+              <strong>Google Play Store</strong>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-wrapper">
+        <a href="#" class="brand">
+          <img src="app_icon.png" alt="E-Sign Logo" class="brand-logo-img">
+          <span>E-Sign</span>
+        </a>
+
+        <ul class="footer-links">
+          <li><a href="PRIVACY_POLICY.md">Privacy Policy</a></li>
+          <li><a href="https://play.google.com/store/apps/details?id=com.e_sign_pr.e_sign_pr" target="_blank" rel="noopener">Google Play</a></li>
+          <li><a href="https://github.com/Ranbirsaini/e-sign-web" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="#developer">Developer</a></li>
+        </ul>
+      </div>
+
+      <div class="copyright">
+        © 2026 E-Sign: Sign PDF & Documents. Engineered by <strong>Ranbir Saini</strong>. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Theme Switcher Logic
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const html = document.documentElement;
+
+    themeToggle.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      themeIcon.className = next === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+      localStorage.setItem('theme', next);
+    });
+
+    // Check system preference / saved
+    const saved = localStorage.getItem('theme');
+    if (saved) {
+      html.setAttribute('data-theme', saved);
+      themeIcon.className = saved === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    }
+
+    // FAQ Accordion Logic
+    document.querySelectorAll('.faq-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const isActive = item.classList.contains('active');
+        document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
+        if (!isActive) item.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
+

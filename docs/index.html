@@ -12,7 +12,14 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="E-Sign: Sign PDF, Edit Documents & Military-Grade Vault">
   <meta property="og:description" content="Digitally sign PDFs, optimize images, remove backgrounds with AI, and password-lock your files with AES-256-GCM.">
-  <meta property="og:url" content="https://play.google.com/store/apps/details?id=com.e_sign_pr.e_sign_pr">
+  <meta property="og:url" content="https://ranbirsaini.github.io/e-sign-web/">
+  <meta property="og:image" content="https://ranbirsaini.github.io/e-sign-web/app_icon.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://ranbirsaini.github.io/e-sign-web/app_icon.png">
+
+  <!-- Favicon / App Icon -->
+  <link rel="icon" type="image/png" href="app_icon.png">
+  <link rel="apple-touch-icon" href="app_icon.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -156,6 +163,30 @@
       color: white;
       font-size: 1.25rem;
       box-shadow: 0 8px 20px -4px var(--primary-glow);
+    }
+    .brand-logo-img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 10px rgba(79, 70, 229, 0.45));
+      border-radius: 10px;
+    }
+    .hero-icon-showcase {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .hero-app-icon {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      filter: drop-shadow(0 16px 32px rgba(79, 70, 229, 0.48));
+      animation: floatIcon 3.5s ease-in-out infinite;
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-8px) scale(1.02); }
     }
     .nav-links {
       display: flex;
@@ -830,9 +861,7 @@
   <header>
     <div class="container nav-wrapper">
       <a href="#" class="brand">
-        <div class="brand-icon">
-          <i class="fa-solid fa-signature"></i>
-        </div>
+        <img src="app_icon.png" alt="E-Sign Logo" class="brand-logo-img">
         <span>E-Sign</span>
       </a>
 
@@ -860,6 +889,9 @@
   <!-- Hero Section -->
   <section class="hero">
     <div class="container">
+      <div class="hero-icon-showcase">
+        <img src="app_icon.png" alt="E-Sign Official App Icon" class="hero-app-icon">
+      </div>
       <div class="release-badge">
         <i class="fa-solid fa-shield-halved"></i>
         <span>v1.0.13 Released • Military-Grade AES-256 Vault Inside</span>
@@ -883,7 +915,7 @@
           </div>
         </a>
 
-        <a href="https://github.com/Ranbir007/e_sign_pr" target="_blank" rel="noopener" class="btn btn-secondary">
+        <a href="https://github.com/Ranbirsaini/e-sign-web" target="_blank" rel="noopener" class="btn btn-secondary">
           <i class="fa-brands fa-github"></i>
           <span>GitHub Repository</span>
         </a>
@@ -1166,7 +1198,7 @@
           </p>
 
           <div class="dev-links">
-            <a href="https://github.com/Ranbir007" target="_blank" rel="noopener" class="btn btn-secondary btn-sm">
+            <a href="https://github.com/Ranbirsaini" target="_blank" rel="noopener" class="btn btn-secondary btn-sm">
               <i class="fa-brands fa-github"></i>
               <span>GitHub Profile</span>
             </a>
@@ -1174,7 +1206,7 @@
               <i class="fa-brands fa-google-play"></i>
               <span>Play Store Apps</span>
             </a>
-            <a href="mailto:support@e-sign.app" class="btn btn-secondary btn-sm">
+            <a href="mailto:sainiranbir645@gmail.com" class="btn btn-secondary btn-sm">
               <i class="fa-solid fa-envelope"></i>
               <span>Contact Developer</span>
             </a>
@@ -1260,16 +1292,14 @@
     <div class="container">
       <div class="footer-wrapper">
         <a href="#" class="brand">
-          <div class="brand-icon">
-            <i class="fa-solid fa-signature"></i>
-          </div>
+          <img src="app_icon.png" alt="E-Sign Logo" class="brand-logo-img">
           <span>E-Sign</span>
         </a>
 
         <ul class="footer-links">
           <li><a href="PRIVACY_POLICY.md">Privacy Policy</a></li>
           <li><a href="https://play.google.com/store/apps/details?id=com.e_sign_pr.e_sign_pr" target="_blank" rel="noopener">Google Play</a></li>
-          <li><a href="https://github.com/Ranbir007/e_sign_pr" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://github.com/Ranbirsaini/e-sign-web" target="_blank" rel="noopener">GitHub</a></li>
           <li><a href="#developer">Developer</a></li>
         </ul>
       </div>
